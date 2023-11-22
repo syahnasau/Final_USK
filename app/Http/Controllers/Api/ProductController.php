@@ -15,7 +15,7 @@ class ProductController extends Controller
     {
         $products = Product::all();
         return response()->json([
-            "message" => "Success, Get Data!",
+            "message" => "Succes, Get Data!",
             "data" => $products
         ],200);
     }
@@ -36,13 +36,12 @@ class ProductController extends Controller
         $product = Product::create($request->all());
         if($product){
             return response()->json([
-                "message" => "Success, Create Data!",
+                "message" => "Succes, Add Data!",
                 "data" => $product
             ],200);
         }
-        // return redirect()->back()->with("status","Failed Add product");
         return response()->json([
-            "message" => "Failed, Create Data!",
+            "message" => "Failed, Add Data!",
             "data" => $product
         ],404);
     }
@@ -71,16 +70,14 @@ class ProductController extends Controller
         $product->update($request->all());
         if($product){
             return response()->json([
-                "message" => "Success, Update Data!",
+                "message" => "Succes, Update Data!",
                 "data" => $product
             ],200);
         }
-        // return redirect()->back()->with("status","Failed Add product");
         return response()->json([
             "message" => "Failed, Update Data!",
             "data" => $product
         ],404);
-
     }
 
     /**
@@ -91,15 +88,13 @@ class ProductController extends Controller
         $product->delete();
         if($product){
             return response()->json([
-                "message" => "Success, Delete Data!",
+                "message" => "Succes, Delete Data!",
                 "data" => $product
             ],200);
         }
-        // return redirect()->back()->with("status","Failed Add product");
         return response()->json([
             "message" => "Failed, Delete Data!",
             "data" => $product
         ],404);
-
     }
 }

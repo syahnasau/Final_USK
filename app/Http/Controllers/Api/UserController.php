@@ -14,7 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return response()->json([
+            "message" => "Succes, Get Data!",
+            "data" => $users
+        ],200);
     }
 
     /**
@@ -34,12 +38,12 @@ class UserController extends Controller
         $users = User::create($request->all());
         if($users){
             return response()->json([
-                "message" => "Success, Update Data!",
+                "message" => "Succes, Add Data!",
                 "data" => $users
             ],200);
         }
         return response()->json([
-            "message" => "Failed, Update Data!",
+            "message" => "Failed, Add Data!",
             "data" => $users
         ],404);
     }
@@ -49,18 +53,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user = User::find($user);
-        if($user){
-            return response()->json([
-                "message" => "Success, Get ID Data!",
-                "data" => $user
-            ],200);
-        }
-        // return redirect()->back()->with("status","Failed Add product");
-        return response()->json([
-            "message" => "Failed, Get ID Data!",
-            "data" => $user
-        ],404);
+
     }
 
     /**
@@ -79,12 +72,12 @@ class UserController extends Controller
         $user->update($request->all());
         if($user){
             return response()->json([
-                "message" => "Success, Update Data!",
+                "message" => "Succes, Update Data!",
                 "data" => $user
             ],200);
         }
         return response()->json([
-            "message" => "Failed, Update Data!",
+            "message" => "Succes, Update Data!",
             "data" => $user
         ],404);
     }
@@ -97,12 +90,12 @@ class UserController extends Controller
         $user->delete();
         if($user){
             return response()->json([
-                "message" => "Success, Update Data!",
+                "message" => "Succes, Delete Data!",
                 "data" => $user
             ],200);
         }
         return response()->json([
-            "message" => "Failed, Update Data!",
+            "message" => "Succes, Delete Data!",
             "data" => $user
         ],404);
     }
