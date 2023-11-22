@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->enum('role', ["admin","bank", "kantin", "siswa"])->default('siswa');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignId('user_id')->constrained();
+            $table->double('credit',10)->nullable();
+            $table->double('debit',10)->nullable();
+            $table->text('description');
+            $table->enum('status', ['process','done'])->default('done');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('wallets');
     }
 };

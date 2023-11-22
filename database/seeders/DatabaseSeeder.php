@@ -3,7 +3,15 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Product;
+use App\Models\Role;
+use App\Models\Transaction;
+use App\Models\Category;
+use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +26,119 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+
+        User::create([
+            "name" => "Syahnas",
+            "role" => 'siswa',
+            "email" => 'syahnas@gmail.com',
+            "password" => Hash::make("syahnas")
+        ]);
+
+        User::create([
+            "name" => "Admin",
+            "role" => 'admin',
+            "email" => 'admin@gmail.com',
+            "password" => Hash::make("admin123")
+        ]);
+
+        User::create([
+            "name" => "Bank",
+            "email" => 'bank@gmail.com',
+            "role" => 'bank',
+            "password" => Hash::make("bank123")
+        ]);
+
+        User::create([
+            "name" => "Kantin",
+            "email" => 'kantin@gmail.com',
+            "role" => 'kantin',
+            "password" => Hash::make("kantin123")
+        ]);
+
+        Category::create([
+            "name" => "Makanan",
+        ]);
+        Category::create([
+            "name" => "Minuman",
+        ]);
+        Category::create([
+            "name" => "Snack",
+        ]);
+
+        Product::create([
+            "name" => "Nasi Bakar",
+            "price" => 6000,
+            "stock" => 64,
+            "photo" => "img/nasi.jpeg",
+            "description" => "test",
+        ]);
+
+        Product::create([
+            "name" => "Lemon Ice Tea",
+            "price" => 3000,
+            "stock" => 50,
+            "photo" => "img/ice-tea.jpeg",
+            "description" => "test",
+        ]);
+
+        Product::create([
+            "name" => "Dimsum",
+            "price" => 6000,
+            "stock" => 26,
+            "photo" => "img/dimsum.jpeg",
+            "description" => "test",
+        ]);
+
+
+        Product::create([
+            "name" => "Sosis Bakar",
+            "price" => 15000,
+            "stock" => 20,
+            "photo" => "img/sosis.jpeg",
+            "description" => "test",
+        ]);
+
+        Wallet::create([
+            "user_id" => 1,
+            "credit" => 100000,
+            "debit" => 0,
+            "description" => "Open Rekening"
+        ]);
+
+
+        Transaction::create([
+            "user_id" => 1,
+            "product_id" => 1,
+            "status" => 'not_paid',
+            "order_id" => 'INV_12345',
+            "quantity" => 1,
+            "price" => 6000
+        ]);
+
+        $transactions = Transaction::where('order_id', 'INV_12345');
+        $total_debit = 0;
+
+        foreach ($transactions as $transaction) {
+            $total_price = $transaction->price * $transaction->quantity;
+            $total_debit = $total_price;
+        }
+
+        Wallet::create([
+            "user_id" => 1,
+            "debit" => $total_debit,
+            "description" => "Buy Product"
+        ]);
+
+        foreach ($transactions as $transaction) {
+            Transaction::find($transaction->id)->update([
+                "status" => "paid"
+            ]);
+        }
+        foreach ($transactions as $transaction) {
+            Transaction::find($transaction->id)->update([
+                "status" => "taken"
+            ]);
+        }
     }
 }
