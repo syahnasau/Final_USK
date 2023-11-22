@@ -16,4 +16,11 @@ class Transaction extends Model
         'status',
         'order_id'
     ];
+
+    public function Wallet(){
+        return $this->hasOne(Wallet::class);
+    }
+    public function Transaction(){
+        return $this->hasMany(Transaction::class);
+    }
 }
