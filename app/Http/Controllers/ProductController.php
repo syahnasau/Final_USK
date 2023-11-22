@@ -20,7 +20,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('kantin.add-product');
     }
 
     /**
@@ -28,7 +28,11 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = Product::create($request->all());
+        if($product){
+            return redirect('home')->with("status","Success Add product");
+        }
+        return redirect()->back()->with("status","Failed Add product");
     }
 
     /**
@@ -44,7 +48,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('kantin.edit-product', compact('product'));
     }
 
     /**
@@ -52,7 +56,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $product->update($request->all());
+        if($product){
+            return redirect('home')->with("status","Success Update product");
+        }
+        return redirect()->back()->with("status","Failed Update product");
+
     }
 
     /**
@@ -60,6 +69,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+        if($product){
+            return redirect('home')->with("status","Success Delete product");
+        }
+        return redirect()->back()->with("status","Failed Delete product");
     }
 }
