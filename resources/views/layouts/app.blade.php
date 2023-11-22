@@ -11,11 +11,8 @@
     <meta name="author" content="Bootstrap Gallery" />
     <link rel="canonical" href="https://www.bootstrap.gallery/">
     <meta property="og:url" content="https://www.bootstrap.gallery">
-    <meta property="og:title" content="Admin Templates - Dashboard Templates | Bootstrap Gallery">
     <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
     <meta property="og:type" content="Website">
-    <meta property="og:site_name" content="Bootstrap Gallery">
-    <link rel="shortcut icon" href="assets/images/favicon.svg">
 
     <!-- Title -->
     <title>Fintech</title>
@@ -49,7 +46,7 @@
 <body style="overflow: hidden;">
 
     <!-- Loading wrapper start -->
-    <div id="loading-wrapper">
+    {{-- <div id="loading-wrapper">
         <div class="spinner">
             <div class="line1"></div>
             <div class="line2"></div>
@@ -58,7 +55,7 @@
             <div class="line5"></div>
             <div class="line6"></div>
         </div>
-    </div>
+    </div> --}}
     <!-- Loading wrapper end -->
 
     <!-- Page wrapper start -->
