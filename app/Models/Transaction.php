@@ -20,7 +20,7 @@ class Transaction extends Model
     public function Wallet(){
         return $this->hasOne(Wallet::class);
     }
-    public function Transaction(){
-        return $this->hasMany(Transaction::class);
+    public function Product(){
+        return $this->belongsTo(Product::class);
     }
 }
