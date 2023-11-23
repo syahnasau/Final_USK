@@ -21,7 +21,7 @@ class WalletController extends Controller
             'description' => $description
         ]);
 
-        return redirect()->back()->with('status', 'Successfully Top Up, deposit cash to the Bank');
+        return redirect()->back()->with('status', 'TopUp request is processed');
 
     }
 

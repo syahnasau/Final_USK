@@ -67,7 +67,7 @@
 
                                         <div class="col-12">
                                             <div class="form-actions-footer">
-                                                <button class="btn btn-light">Cancel</button>
+                                                <a href="{{ route('home') }}" class="btn btn-light">Cancel</a>
                                                 <button type="submit" class="btn btn-success">Submit</button>
                                             </div>
                                         </div>

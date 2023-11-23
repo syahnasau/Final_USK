@@ -19,4 +19,7 @@ class Product extends Model
     public function Transaction(){
         return $this->hasMany(Transaction::class);
     }
+    public function Category(){
+        return $this->belongsTo(Category::class);
+    }
 }

@@ -39,14 +39,11 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Role</label>
                                                 <select name="role" id="" class="form-control">
-                                                    <option>-- Choose Role --</option>
-                                                    {{-- <option>Siswa</option>
-                                                    <option>Bank</option>
-                                                    <option>Kantin</option>
-                                                    <option>Admin</option> --}}
-                                                    @foreach ($user as $user->role => $role)
-                                                        <option>{{ $role }}</option>
-                                                    @endforeach
+                                                    <option value="{{ $user->role }}"></option>
+                                                    <option value="bank">Bank</option>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="kantin">Kantin</option>
+                                                    <option value="siswa">Siswa</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -69,7 +66,7 @@
 
                                         <div class="col-12">
                                             <div class="form-actions-footer">
-                                                <button class="btn btn-light">Cancel</button>
+                                                <a href="{{ route('home') }}" class="btn btn-light">Cancel</a>
                                                 <button type="submit" class="btn btn-success">Submit</button>
                                             </div>
                                         </div>

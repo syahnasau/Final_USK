@@ -34,11 +34,8 @@ class TransactionController extends Controller
         if($total_debit > $saldo){
             return redirect()-> back()->with('status', 'Saldo tidak cukup');
         }
-        elseif($total_debit <= 0){
-            return redirect()-> back()->with('status', 'anda belum masukan keranjang');
-        }
-        else{
 
+        else{
             foreach($carts as $cart){
                 if($cart->product->stock > 0){
                     Transaction::find($cart->id)->update([
@@ -53,14 +50,14 @@ class TransactionController extends Controller
                 else{
                     $total_debit = $total_debit - ($cart->price * $cart->quantity);
                 }
+                Wallet::create([
+                    'user_id' => Auth::user()->id,
+                    'debit' => $total_debit,
+                    'description' => 'Buy Product',
+                ]);
             }
 
-            Wallet::create([
-                'user_id' => Auth::user()->id,
-                'debit' => $total_debit,
-                'description' => 'Buy Product',
-            ]);
-            return redirect()->back()->with('status', 'Berhasil membayar');
+            return redirect()->back()->with('status', 'Success Payment');
         }
     }
 
@@ -76,10 +73,6 @@ class TransactionController extends Controller
 
         if($stock <= 0){
             return redirect()-> back()->with('status', 'Stock habis');
-        }
-        else if($quantity <= 0){
-            return redirect()-> back()->with('status', 'Jumlah tidak boleh 0');
-
         }
         else{
             Transaction::create([
@@ -102,15 +95,7 @@ class TransactionController extends Controller
             $total_price = $transaction->price * $transaction->quantity;
             $total_biaya += $total_price;
         }
-        return view('e-receipt', compact('transactions', 'total_biaya'));
-    }
-
-    public function pickUp($id){
-        Transaction::find($id)->update([
-            'status' => 'taken'
-        ]);
-
-        return redirect()->back()->with('status', 'Done Pick Up Product');
+        return view('detail', compact('transactions', 'total_biaya'));
     }
 
     public function destroy($id){

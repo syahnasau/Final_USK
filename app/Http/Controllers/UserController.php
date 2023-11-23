@@ -21,6 +21,7 @@ class UserController extends Controller
     public function create()
     {
         return view('admin.add-user');
+
     }
 
     /**
@@ -28,19 +29,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create([
-            $request->all()
-        ]);
-        if($user){
-            return redirect('home')->with('status', 'Success Add User');
+        $users = User::create($request->all());
+        if($users){
+            return redirect('home')->with("status","Success Add User");
         }
-        return redirect()->back()->with('status', 'Failed Add Data');
+        return redirect()->back()->with("status","Failed Add User");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
 
     }
@@ -48,33 +47,32 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        return view('admin.edit-user', compact('id'));
+        return view('admin.edit-user', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        $user = User::find($id);
         $user->update($request->all());
         if($user){
-            return redirect('home')->with('status', 'Success Update User');
+            return redirect('home')->with("status","Success Update User");
         }
-        return redirect()->back()->with('status', 'Failed Update User');
+        return redirect()->back()->with("status","Failed Update");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        $user = User::find($id);
+        $user->delete();
         if($user){
-            return redirect('home')->with('status', 'Success Delete User ');
+            return redirect('home')->with("status","Success Delete User");
         }
-        return redirect()->back()->with('status', 'Failed Delete Data');
+        return redirect()->back()->with("status","Failed to Delete User");
     }
 }

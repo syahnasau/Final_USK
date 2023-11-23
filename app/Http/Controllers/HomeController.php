@@ -31,22 +31,37 @@ class HomeController extends Controller
     {
 
         if(Auth::user()->role == 'admin'){
-            $user = User::where('role', 'siswa')->get()->count();
+            $user = User::all()->count();
             $products = Product::all()->count();
             $transactions = Transaction::all()->count();
             $userAll = User::all();
+            $mutasi = Wallet::where('status', 'done')->orderBy('created_at', 'DESC')->get();
+            $transactionsAll = Transaction::where('status', 'paid')->orderBy('created_at', 'DESC')->paginate(5)->groupBy('order_id');
 
-            return view('home', compact('user','products', 'transactions', 'userAll'));
+
+            return view('home', compact('mutasi', 'user','products', 'transactions', 'userAll', 'transactionsAll'));
         }
 
         if(Auth::user()->role == 'kantin'){
             $products = Product::all();
-            $categories = Category::all()->count();
             $allProducts = Product::all()->count();
-            $transactions = Transaction::where('status', 'paid')->get();
-            $transactionAll = Transaction::where('status', 'paid')->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(5)->groupBy('order_id');
+            $transactions = Wallet::where('description', 'Buy Product')->count();
+            // $transactionAll = Transaction::where('status', 'paid')
+            //     ->where('user_id', Auth::user()->id)
+            //     ->orderBy('created_at', 'DESC')
+            //     ->paginate(5)
+            //     ->groupBy('order_id');
+            $transactionAll = Transaction::where('status', 'paid')->orderBy('created_at', 'DESC')->paginate(5)->groupBy('order_id');
+            $wallets = Wallet::where('description', 'Buy Product')->get();
 
-            return view('home', compact('products', 'allProducts', 'transactions', 'transactionAll', 'categories'));
+            $credit = 0;
+            $debit = 0;
+            foreach ($wallets as $wallet){
+                $credit += $wallet->credit;
+                $debit += $wallet->debit;
+            }
+            $saldo = $debit + $credit;
+            return view('home', compact('saldo', 'products', 'allProducts', 'transactions', 'transactionAll'));
         }
 
         if(Auth::user()->role == 'bank'){
@@ -54,18 +69,19 @@ class HomeController extends Controller
 
             $credit = 0;
             $debit = 0;
-            foreach ($wallets as $wallet) {
+            foreach ($wallets as $wallet){
                 $credit += $wallet->credit;
                 $debit += $wallet->debit;
             }
             $saldo = $credit - $debit;
             $nasabah = User::where('role', 'siswa')->get()->count();
             $transactions = Transaction::all()->groupBy('order_id')->count();
-            $request_topup = Wallet::where('status', 'process')->orderBy('created_at', 'DESC')->get();
+            $request_payment = Wallet::where('status', 'process')->orderBy('created_at', 'DESC')->get();
             $mutasi = Wallet::where('status', 'done')->orderBy('created_at', 'DESC')->get();
+            $allMutasi = Wallet::where('status', 'done')->count();
 
 
-            return view('home', compact('saldo', 'nasabah', 'transactions', 'request_topup', 'mutasi'));
+            return view('home', compact('allMutasi', 'saldo', 'nasabah', 'transactions', 'request_payment', 'mutasi'));
         }
 
         if (Auth::user()->role == 'siswa') {
@@ -90,12 +106,12 @@ class HomeController extends Controller
                 $total_biaya += $total_price;
             }
 
-            $transactions = Transaction::where('status', 'taken')
+            $transactions = Transaction::where('status', 'paid')
                 ->where('user_id', Auth::user()->id)
                 ->orderBy('created_at', 'DESC')
                 ->paginate(5)
                 ->groupBy('order_id');
-
+            // $transactions = Transaction::where('status', 'paid')->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->groupBy('order_id');
             $mutasi = Wallet::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->get();
 
             return view('home', compact('saldo', 'products', 'carts', 'total_biaya', 'mutasi', 'transactions', ));

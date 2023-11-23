@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
 
         User::create([
-            "name" => "Syahnas",
+            "name" => "Syahnas Agustina",
             "role" => 'siswa',
             "email" => 'syahnas@gmail.com',
             "password" => Hash::make("syahnas")
@@ -69,17 +69,17 @@ class DatabaseSeeder extends Seeder
         Product::create([
             "name" => "Nasi Bakar",
             "price" => 6000,
-            "stock" => 64,
+            "stock" => 14,
             "photo" => "img/nasi.jpeg",
-            "description" => "test",
+            "description" => "Nasi Bakar isi",
         ]);
 
         Product::create([
             "name" => "Lemon Ice Tea",
             "price" => 3000,
-            "stock" => 50,
+            "stock" => 30,
             "photo" => "img/ice-tea.jpeg",
-            "description" => "test",
+            "description" => "Lemon teh segar",
         ]);
 
         Product::create([
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
             "price" => 6000,
             "stock" => 26,
             "photo" => "img/dimsum.jpeg",
-            "description" => "test",
+            "description" => "Pangsit ayam",
         ]);
 
 
@@ -96,49 +96,26 @@ class DatabaseSeeder extends Seeder
             "price" => 15000,
             "stock" => 20,
             "photo" => "img/sosis.jpeg",
-            "description" => "test",
+            "description" => "Sosis sapi bakar",
         ]);
 
-        Wallet::create([
-            "user_id" => 1,
-            "credit" => 100000,
-            "debit" => 0,
-            "description" => "Open Rekening"
-        ]);
+        // Wallet::create([
+        //     "user_id" => 1,
+        //     "credit" => 100000,
+        //     "debit" => 0,
+        //     "description" => "Open Rekening"
+        // ]);
 
 
-        Transaction::create([
-            "user_id" => 1,
-            "product_id" => 1,
-            "status" => 'not_paid',
-            "order_id" => 'INV_12345',
-            "quantity" => 1,
-            "price" => 6000
-        ]);
+        // Transaction::create([
+        //     "user_id" => 1,
+        //     "product_id" => 1,
+        //     "status" => 'not_paid',
+        //     "order_id" => 'INV_12345',
+        //     "quantity" => 1,
+        //     "price" => 6000
+        // ]);
 
-        $transactions = Transaction::where('order_id', 'INV_12345');
-        $total_debit = 0;
 
-        foreach ($transactions as $transaction) {
-            $total_price = $transaction->price * $transaction->quantity;
-            $total_debit = $total_price;
-        }
-
-        Wallet::create([
-            "user_id" => 1,
-            "debit" => $total_debit,
-            "description" => "Buy Product"
-        ]);
-
-        foreach ($transactions as $transaction) {
-            Transaction::find($transaction->id)->update([
-                "status" => "paid"
-            ]);
-        }
-        foreach ($transactions as $transaction) {
-            Transaction::find($transaction->id)->update([
-                "status" => "taken"
-            ]);
-        }
     }
 }

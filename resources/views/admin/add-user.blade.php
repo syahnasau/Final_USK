@@ -34,12 +34,11 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Role</label>
                                                 <select name="role" id="" class="form-control">
-                                                    <option value="">-- Choose role --</option>
-                                                    <option value="">Siswa</option>
-                                                    <option value="">Bank</option>
-                                                    <option value="">Kantin</option>
-                                                    <option value="">Admin</option>
-
+                                                    <option value="">-- Choose Role --</option>
+                                                    <option value="bank">Bank</option>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="kantin">Kantin</option>
+                                                    <option value="siswa">Siswa</option>
                                                 </select>
 
                                             </div>
@@ -60,7 +59,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="form-actions-footer">
-                                                <button class="btn btn-light">Cancel</button>
+                                                <a href="{{ route('home') }}" class="btn btn-light">Cancel</a>
                                                 <button type="submit" class="btn btn-success">Submit</button>
                                             </div>
                                         </div>
