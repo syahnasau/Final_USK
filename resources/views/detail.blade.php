@@ -65,4 +65,5 @@
     </div>
 @endsection
 
+<script>print()</script>
 
