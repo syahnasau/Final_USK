@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Transaction;
 use App\Models\Product;
 use App\Models\Wallet;
@@ -16,8 +17,8 @@ class TransactionController extends Controller
         $carts = Transaction::where('user_id', Auth::user()->id)->where('status', 'not_paid')->get();
         $total_debit = 0;
         foreach($carts as $cart){
-            $total_price = $cart->price * $cart->quantity;
-            $total_debit += $total_price;
+          $total_price = $cart->price * $cart->quantity;
+          $total_debit += $total_price;
         }
 
         $wallets = Wallet::where('user_id', Auth::user()->id)->get();
@@ -25,43 +26,40 @@ class TransactionController extends Controller
         $debit = 0;
 
         foreach($wallets as $wallet){
-            $credit += $wallet->credit;
-            $debit += $wallet->debit;
+          $credit += $wallet->credit;
+          $debit += $wallet->debit;
         }
 
         $saldo = $credit - $debit;
 
         if($total_debit > $saldo){
-            return redirect()-> back()->with('status', 'Saldo tidak cukup');
-        }
+          return redirect()->back()->with('status', 'Saldo tidak cukup');
+        } else {
+          foreach($carts as $cart){
+            if($cart->product->stock > 0){
+              Transaction::find($cart->id)->update([
+                'status' => $status,
+                'order_id' => $order_id
+              ]);
 
-        else{
-            foreach($carts as $cart){
-                if($cart->product->stock > 0){
-                    Transaction::find($cart->id)->update([
-                        'status' => $status,
-                        'order_id' => $order_id
-                    ]);
-
-                    Product::find($cart->product->id)->update([
-                        'stok' => $cart->product->stock - $cart->quantity,
-                    ]);
-                }
-                else{
-                    $total_debit = $total_debit - ($cart->price * $cart->quantity);
-                }
-                Wallet::create([
-                    'user_id' => Auth::user()->id,
-                    'debit' => $total_debit,
-                    'description' => 'Buy Product',
-                ]);
+              Product::find($cart->product->id)->update([
+                'stok' => $cart->product->stock - $cart->quantity,
+              ]);
+            } else {
+              $total_debit -= ($cart->price * $cart->quantity);
             }
-
-            return redirect()->back()->with('status', 'Success Payment');
+          }
+          Wallet::create([
+            'user_id' => Auth::user()->id,
+            'debit' => $total_debit,
+            'description' => 'Buy Product',
+          ]);
+          return redirect()->back()->with('status', 'Success Payment');
         }
-    }
+      }
 
-    public function addToCart (Request $request){
+    public function addToCart(Request $request)
+    {
 
         $user_id = $request->user_id;
         $product_id = $request->product_id;
@@ -71,34 +69,34 @@ class TransactionController extends Controller
 
         $stock = Product::find($product_id)->stock;
 
-        if($stock <= 0){
-            return redirect()-> back()->with('status', 'Stock habis');
-        }
-        else{
+        if ($stock <= 0) {
+            return redirect()->back()->with('status', 'Stock habis');
+        } else {
             Transaction::create([
-                'user_id' =>$user_id,
-                'product_id' =>$product_id,
+                'user_id' => $user_id,
+                'product_id' => $product_id,
                 'status' => $status,
-                'price' =>$price,
-                'quantity' =>$quantity,
+                'price' => $price,
+                'quantity' => $quantity,
             ]);
-            return redirect()-> back()->with('status', 'Success Add to Cart');
+            return redirect()->back()->with('status', 'Success Add to Cart');
         }
-
     }
 
-    public function download($order_id){
+    public function download($order_id)
+    {
         $transactions = Transaction::where('order_id', $order_id)->get();
         $total_biaya = 0;
 
-        foreach($transactions as $transaction){
+        foreach ($transactions as $transaction) {
             $total_price = $transaction->price * $transaction->quantity;
             $total_biaya += $total_price;
         }
         return view('detail', compact('transactions', 'total_biaya'));
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         Transaction::find($id)->delete();
 
         return redirect()->back()->with('status', 'Order Deleted');

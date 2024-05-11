@@ -164,7 +164,7 @@
                                             <form action="{{ route('transaction.destroy', ['id' => $cart->id]) }}" method="POST">
                                                 @csrf
                                                 @method('delete')
-                                                <button type="submit" class="btn btn-danger bi bi-x"></button>
+                                                <button type="submit" class="btn btn-danger bi bi-x m-1"></button>
                                             </form>
                                         </li>
                                     @endforeach
